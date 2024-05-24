@@ -1,5 +1,4 @@
-// Following Next Tutorial: https://www.youtube.com/watch?v=2IhzPTS4av4
-// a.a.
+
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -13,13 +12,20 @@ public class PickupAndDrop : MonoBehaviour
     private ObjectGrabbable objectGrabbable;
     [SerializeField] private float pickupDistance = 2f;
 
+    
+
+
+    private void Start()
+    {
+        
+    }
     private void Update()
     {
         if (Input.GetKeyUp(KeyCode.E))
         {
             if (objectGrabbable == null)
             {
-                if( Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit raycastHit, pickupDistance, pickUpLayerMask))
+                if (Physics.Raycast(playerCameraTransform.position, playerCameraTransform.forward, out RaycastHit raycastHit, pickupDistance, pickUpLayerMask))
                 {
                     if (raycastHit.transform.TryGetComponent(out objectGrabbable))
                     {
@@ -32,8 +38,7 @@ public class PickupAndDrop : MonoBehaviour
                 objectGrabbable.Drop();
                 objectGrabbable = null;
             }
-
-
+            
 
         }
     }

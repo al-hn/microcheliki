@@ -9,9 +9,12 @@ public class ObjectGrabbable : MonoBehaviour
     private Transform objectGrabPointTransform;
     [SerializeField] private float lerpSpeed = 10.0f;
 
+    AttachingObject attachingObject;
+
     private void Awake()
     {
         objectRigidBody = GetComponent<Rigidbody>();
+        
     }
 
     public void Grab(Transform objectGrabPointTransform)
@@ -22,8 +25,12 @@ public class ObjectGrabbable : MonoBehaviour
 
     public void Drop()
     {
-        this.objectGrabPointTransform = null;
-        objectRigidBody.useGravity = true;
+        if(!attachingObject.isAttached) 
+        {
+            this.objectGrabPointTransform = null;
+            objectRigidBody.useGravity = true;
+        }
+        
     }
 
     private void FixedUpdate()
