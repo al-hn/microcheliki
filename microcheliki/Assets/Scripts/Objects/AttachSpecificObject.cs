@@ -15,6 +15,8 @@ public class AttachSpecificObject : MonoBehaviour
     [Header("Attachment Properties")]
     [SerializeField] private float lerpSpeed = 10.0f;
 
+  
+
     [HideInInspector]
     public bool isAttached = false;
     private Rigidbody carRigidbody;
@@ -44,7 +46,6 @@ public class AttachSpecificObject : MonoBehaviour
             }
 
             GameObject item = Instantiate(objectToInstantiate, attachPoint.position, Quaternion.identity);
-            Destroy(other.gameObject);
             Debug.Log("Instantiated object: " + item.name);
 
             item.layer = LayerMask.NameToLayer("Default");
@@ -53,10 +54,15 @@ public class AttachSpecificObject : MonoBehaviour
             if (objectRigidbody == null)
             {
                 Debug.LogError("Rigidbody not found on the instantiated object.");
+                Destroy(item);
                 return;
             }
 
             AttachObjectToCar(objectRigidbody);
+
+            // Set the turret in the Upgrade UI
+            Turret turret = item.GetComponent<Turret>();
+          
 
             Destroy(other.gameObject);
         }
@@ -85,3 +91,4 @@ public class AttachSpecificObject : MonoBehaviour
         transform.position = targetPosition;
     }
 }
+

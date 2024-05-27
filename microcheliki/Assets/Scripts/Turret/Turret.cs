@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class Turret : MonoBehaviour
 {
     [Header("Rotation Properties")]
-
     public float range = 15f;
     public Transform partToRotate;
     public float turnSpeed = 0.5f;
@@ -26,47 +22,46 @@ public class Turret : MonoBehaviour
     [Header("Use Laser")]
     public bool useLaser = false;
     public int damageOverTime = 30;
-    
     public ParticleSystem impactEffect;
     public float slowPercentage = .5f;
 
-    
+    [Header("Upgrade Properties")]
+    public float[] upgradeFireRates;
+    public float[] upgradeRanges;
+    public int[] upgradeCosts;
+    private int currentUpgradeLevel = 0;
+
+    private FinanceManager financeManager;
 
     private void Start()
     {
         InvokeRepeating("UpdateTarget", 0f, 2f);
-        
+        financeManager = FindObjectOfType<FinanceManager>();
     }
 
     private void Update()
     {
-        if(targetEnemy != null) 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            UpgradeTurret();
+        }
+
+        if (targetEnemy != null)
         {
             if (fireCountdown <= 0f)
             {
                 Shoot();
-
                 fireCountdown = 1f / fireRate;
             }
             fireCountdown -= Time.deltaTime;
             LockOnEnemy();
-
         }
-      
-        
-
-
     }
-
-
 
     private void LockOnEnemy()
     {
-        //calculating distance
         Vector3 direction = target.position - transform.position;
-        //calculating look at rotation
         Quaternion lookRotation = Quaternion.LookRotation(direction);
-        //converting to euler angles
         Vector3 rotation = Quaternion.Lerp(partToRotate.rotation, lookRotation, Time.deltaTime * turnSpeed).eulerAngles;
         partToRotate.rotation = Quaternion.Euler(0f, rotation.y, 0f);
     }
@@ -74,7 +69,7 @@ public class Turret : MonoBehaviour
     public void Shoot()
     {
         Debug.Log("Shoot");
-        GameObject bullet_GO = (GameObject)Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
+        GameObject bullet_GO = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         Bullet bullet = bullet_GO.GetComponent<Bullet>();
 
         if (bullet != null)
@@ -82,7 +77,6 @@ public class Turret : MonoBehaviour
             bullet.Seek(target);
         }
     }
-
 
     private void OnDrawGizmosSelected()
     {
@@ -107,7 +101,6 @@ public class Turret : MonoBehaviour
             {
                 target = nearestEnemy.transform;
                 targetEnemy = nearestEnemy.GetComponent<ZombieEnemy>();
-
             }
             else
             {
@@ -115,4 +108,53 @@ public class Turret : MonoBehaviour
             }
         }
     }
+
+    public int GetUpgradeCost()
+    {
+        if (currentUpgradeLevel < upgradeCosts.Length)
+        {
+            return upgradeCosts[currentUpgradeLevel];
+        }
+        return -1; 
+    }
+    public void UpgradeTurret()
+    {
+        if (currentUpgradeLevel >= upgradeFireRates.Length || currentUpgradeLevel >= upgradeRanges.Length)
+        {
+            Debug.Log("Turret is on MAX Level.");
+            return;
+        }
+
+        int cost = GetUpgradeCost();
+
+        // Check if it's not the first level and if the cost is valid
+        if (currentUpgradeLevel > 0 && cost > 0 && financeManager != null)
+        {
+            if (financeManager.SpendMoney(cost))
+            {
+                fireRate = upgradeFireRates[currentUpgradeLevel];
+                range = upgradeRanges[currentUpgradeLevel];
+                currentUpgradeLevel++;
+
+                Debug.Log("Turret upgraded! Fire Rate: " + fireRate + ", Range: " + range);
+            }
+            else
+            {
+                Debug.Log("Not enough money to upgrade turret!");
+            }
+        }
+        else
+        {
+            // If it's the first level or the cost is 0, upgrade without withdrawing money
+            fireRate = upgradeFireRates[currentUpgradeLevel];
+            range = upgradeRanges[currentUpgradeLevel];
+            currentUpgradeLevel++;
+
+            Debug.Log("Turret upgraded! Fire Rate: " + fireRate + ", Range: " + range);
+        }
+    }
+
+
+
+
 }
