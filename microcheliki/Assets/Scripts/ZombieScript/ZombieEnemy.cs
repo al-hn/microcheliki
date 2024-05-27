@@ -27,7 +27,9 @@ public class ZombieEnemy : MonoBehaviour
 
 
 
-   
+
+
+
 
 
     //debug
