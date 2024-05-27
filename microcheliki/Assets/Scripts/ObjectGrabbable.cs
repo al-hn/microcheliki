@@ -25,12 +25,11 @@ public class ObjectGrabbable : MonoBehaviour
 
     public void Drop()
     {
-        if(!attachingObject.isAttached) 
-        {
+        // if(!attachingObject.isAttached)
+        // {
             this.objectGrabPointTransform = null;
             objectRigidBody.useGravity = true;
-        }
-        
+        // }
     }
 
     private void FixedUpdate()
