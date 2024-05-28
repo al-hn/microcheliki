@@ -1,4 +1,3 @@
-
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -9,50 +8,60 @@ public class OutlineObject : MonoBehaviour
 {
     [Header("Outline Material")]
     public Material outlineMaterial;
-    Material originalMaterial;
-    GameObject lastHighlightedObject;
- 
-    void HighlightObject(GameObject gameObject)
-    {
-        if (lastHighlightedObject != gameObject)
-        {
-            ClearHighlighted();
-            originalMaterial = gameObject.GetComponent<MeshRenderer>().material;
-            gameObject.GetComponent<MeshRenderer>().material = outlineMaterial;
-            lastHighlightedObject = gameObject;
-            
+    private Material originalMaterial;
+    private MeshRenderer meshRenderer;
+    [Header("Detection Distance")]
+    public float rayDistance = 10.0f;
+    private bool isHighlighted = false;
 
-        }
-    }
- 
-    void ClearHighlighted()
+    private void Start()
     {
-        if (lastHighlightedObject != null)
+        meshRenderer = GetComponent<MeshRenderer>();
+        originalMaterial = meshRenderer.material;
+    }
+
+    private void HighlightObject()
+    {
+        if (!isHighlighted)
         {
-            lastHighlightedObject.GetComponent<MeshRenderer>().material = originalMaterial;
-            lastHighlightedObject = null;
+            meshRenderer.material = outlineMaterial;
+            isHighlighted = true;
         }
     }
- 
-    void HighlightObjectInCenterOfCam()
+
+    private void ClearHighlighted()
     {
-        float rayDistance = 1000.0f;
-        // Ray from the center of the viewport.
+        if (isHighlighted)
+        {
+            meshRenderer.material = originalMaterial;
+            isHighlighted = false;
+        }
+    }
+
+    private void HighlightObjectInCenterOfCam()
+    {
         Ray ray = Camera.main.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0f));
         RaycastHit rayHit;
-        // Check if we hit something.
+        
         if (Physics.Raycast(ray, out rayHit, rayDistance))
         {
-            // Get the object that was hit.
-            GameObject hitObject = rayHit.collider.gameObject;
-            HighlightObject(hitObject);
-        } else
+            // Check if the hit object is the same as this object.
+            if (rayHit.collider.gameObject == gameObject)
+            {
+                HighlightObject();
+            }
+            else
+            {
+                ClearHighlighted();
+            }
+        }
+        else
         {
             ClearHighlighted();
         }
     }
- 
-    void Update()
+
+    private void Update()
     {
         HighlightObjectInCenterOfCam();
     }
