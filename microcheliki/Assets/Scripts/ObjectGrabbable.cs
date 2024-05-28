@@ -1,6 +1,7 @@
 // a.a.
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class ObjectGrabbable : MonoBehaviour
@@ -8,13 +9,12 @@ public class ObjectGrabbable : MonoBehaviour
     private Rigidbody objectRigidBody;
     private Transform objectGrabPointTransform;
     [SerializeField] private float lerpSpeed = 10.0f;
-
     AttachingObject attachingObject;
 
     private void Awake()
     {
         objectRigidBody = GetComponent<Rigidbody>();
-        
+
     }
 
     public void Grab(Transform objectGrabPointTransform)
@@ -22,6 +22,7 @@ public class ObjectGrabbable : MonoBehaviour
         this.objectGrabPointTransform = objectGrabPointTransform;
         objectRigidBody.useGravity = false;
     }
+    
 
     public void Drop()
     {

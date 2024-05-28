@@ -15,7 +15,7 @@ public class GasTank : MonoBehaviour
             gasVolume = Mathf.Clamp(gasVolume, 0, 100); // Clamp the value between 0 - 100
             gasVolume = gasVolume - 1;
             nextDecrementTime = Time.time + decrementInterval; // Wait 1 Sec
-
+            Debug.Log($"{gasVolume}");
             // Implement so that car's tank will be fueling
         }
     }
