@@ -28,7 +28,7 @@ public class Turret : MonoBehaviour
     public float[] upgradeFireRates;
     public float[] upgradeRanges;
     public int[] upgradeCosts;
-    public float[] upgradeBulletSpeeds; // Add this line
+    public float[] upgradeBulletSpeeds;
     private int currentUpgradeLevel = 0;
 
     private FinanceManager financeManager;
