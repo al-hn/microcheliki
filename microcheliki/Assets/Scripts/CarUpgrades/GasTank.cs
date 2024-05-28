@@ -7,16 +7,28 @@ public class GasTank : MonoBehaviour
     [SerializeField] int gasVolume = 100;
     private float decrementInterval = 1.0f;     // Time in sec, between each decrement
     private float nextDecrementTime = 0.0f;
+    Tank tank;
+
+    private void Start()
+    {
+        tank = GameObject.Find("Tank").GetComponent<Tank>();
+    }
 
     void OnCollisionStay(Collision other)
     {
-        if(other.gameObject.name == "Car")
+        if(other.gameObject.name == "Muscle")
         {
-            gasVolume = Mathf.Clamp(gasVolume, 0, 100); // Clamp the value between 0 - 100
-            gasVolume = gasVolume - 1;
-            nextDecrementTime = Time.time + decrementInterval; // Wait 1 Sec
-            Debug.Log($"{gasVolume}");
-            // Implement so that car's tank will be fueling
+            if(gasVolume > 0)
+            {
+                gasVolume = gasVolume - 1;
+                tank.Fuel();
+                nextDecrementTime = Time.time + decrementInterval; // Wait 1 Sec
+                Debug.Log($"gasVol: {gasVolume}");
+            }
+            else
+            {
+                Debug.Log("GasTankIs Drained!");
+            }
         }
     }
 
