@@ -16,7 +16,7 @@ public class CarHealth : MonoBehaviour
         Debug.Log(car_health);
 
     }
-
+    
     public void DamageCar(float damageAmount)
     {
         car_health -= damageAmount;
@@ -31,7 +31,11 @@ public class CarHealth : MonoBehaviour
     public void IncreaseMaxHealthCapacity(float increaseAmount)
     {
         car_MaxHealth += increaseAmount;
+        car_health = car_MaxHealth;
+
     }
+
+
 
 
 }

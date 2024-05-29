@@ -82,6 +82,7 @@ public class Shield : MonoBehaviour
         if(carHealth != null)
         {
             carHealth.IncreaseMaxHealthCapacity(shieldCapacity);
+            
         }
     }
     //after instantiating shield on car we need to be able to activate shield
