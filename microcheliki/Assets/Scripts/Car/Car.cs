@@ -7,7 +7,7 @@ public class Car : MonoBehaviour
     [Header("Wheel Properties")]
     [SerializeField] AttachingObject[] wheel_attachmentPoints; 
     private int attachedWheelsCount = 0;
-    private bool wheelsAttached = false; 
+    private bool wheelsAttached = false;
 
     private void Start()
     {
