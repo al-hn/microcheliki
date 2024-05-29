@@ -1175,6 +1175,37 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!114 &859242570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859242567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1c110990fee0f664c92a377c1aba8455, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wheel_attachmentPoints:
+  - {fileID: 710338190}
+  - {fileID: 560529376}
+  - {fileID: 208141223}
+  - {fileID: 1716301269}
+--- !u!114 &859242571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 859242567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc773eea408d1334f87c05a94d9167b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  car_MaxHealth: 100
+  car_health: 100
 --- !u!1 &890377962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1861,6 +1892,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6036943006681877870, guid: 7ee328feae54bc84cb567a695f15aee3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 859242569}
+    - targetCorrespondingSourceObject: {fileID: 6036943006681877870, guid: 7ee328feae54bc84cb567a695f15aee3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 859242570}
+    - targetCorrespondingSourceObject: {fileID: 6036943006681877870, guid: 7ee328feae54bc84cb567a695f15aee3, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 859242571}
     - targetCorrespondingSourceObject: {fileID: 5239025143929755519, guid: 7ee328feae54bc84cb567a695f15aee3, type: 3}
       insertIndex: -1
       addedObject: {fileID: 710338191}
@@ -2487,6 +2524,7 @@ GameObject:
   - component: {fileID: 1797141790}
   - component: {fileID: 1797141794}
   - component: {fileID: 1797141795}
+  - component: {fileID: 1797141796}
   m_Layer: 10
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -2620,6 +2658,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1797141796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1797141788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa84957ddc553604583e374039ae58b1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  shieldCapacity: 50
+  upgradeHealthCapacityAmount:
+  - 50
+  - 75
+  - 100
+  upgradeCosts: c80000002c01000090010000
 --- !u!1 &1830618928
 GameObject:
   m_ObjectHideFlags: 0

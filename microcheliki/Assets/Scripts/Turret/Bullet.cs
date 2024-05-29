@@ -1,15 +1,14 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    
     private Rigidbody rb;
     public float explosionRadius = 0f;
     private bool targetHit;
     private Transform target;
     public GameObject explosionParticle;
-    public float speed = 70f;
+    public float speed = 70f; // This will be set by the Turret script
 
     private void Start()
     {
@@ -41,16 +40,13 @@ public class Bullet : MonoBehaviour
     {
         // Play explosion effect
         GameObject effectInstance = Instantiate(explosionParticle, transform.position, transform.rotation);
-        Destroy(effectInstance, 10f); 
+        Destroy(effectInstance, 10f);
 
-        
         Damage(target);
 
         // Destroy the bullet
-        Destroy(gameObject,5f);
+        Destroy(gameObject, 5f);
     }
-
-
 
     private void OnDrawGizmosSelected()
     {
@@ -80,7 +76,6 @@ public class Bullet : MonoBehaviour
             targetHit = true;
             HitTarget();
         }
-      
     }
 
     public void Seek(Transform _target)

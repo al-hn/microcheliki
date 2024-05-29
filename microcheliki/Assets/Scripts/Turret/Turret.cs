@@ -24,11 +24,11 @@ public class Turret : MonoBehaviour
     public int damageOverTime = 30;
     public ParticleSystem impactEffect;
     public float slowPercentage = .5f;
-
     [Header("Upgrade Properties")]
     public float[] upgradeFireRates;
     public float[] upgradeRanges;
     public int[] upgradeCosts;
+    public float[] upgradeBulletSpeeds;
     private int currentUpgradeLevel = 0;
 
     private FinanceManager financeManager;
@@ -75,6 +75,16 @@ public class Turret : MonoBehaviour
         if (bullet != null)
         {
             bullet.Seek(target);
+
+            if (currentUpgradeLevel < upgradeBulletSpeeds.Length)
+            {
+                bullet.speed = upgradeBulletSpeeds[currentUpgradeLevel];
+            }
+            else
+            {
+                Debug.LogWarning("currentUpgradeLevel is out of bounds for upgradeBulletSpeeds array.");
+                bullet.speed = upgradeBulletSpeeds[upgradeBulletSpeeds.Length - 1]; // Set to max level speed as fallback
+            }
         }
     }
 
