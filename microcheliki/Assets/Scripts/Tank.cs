@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tank : MonoBehaviour
 {
     [Header("Car's Fuel")]
-    [SerializeField] public int gasVolume = 0;
+    [SerializeField] public int gasVolume = 50;
     [Header("Fuel Capacity")]
     [SerializeField] public int gasVolumeUpperLimit = 100;
 
@@ -13,6 +13,11 @@ public class Tank : MonoBehaviour
     {
         if (gasVolume < gasVolumeUpperLimit) gasVolume = gasVolume + 1;
         else Debug.Log("Car Fuel Is Full!");
+    }
+
+    public void DecreaseFuel()
+    {
+        gasVolume = gasVolume - 1;
     }
 
     private void Update()

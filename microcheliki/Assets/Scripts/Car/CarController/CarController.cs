@@ -20,9 +20,18 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
     [SerializeField] private Transform rearLeftWheelTransform, rearRightWheelTransform;
 
+    private Tank tank;
+
+    private void Start()
+    {
+        tank = GameObject.Find("Tank").GetComponent<Tank>();
+    }
+
     private void FixedUpdate() {
         GetInput();
+        
         HandleMotor();
+        HandleGas();
         HandleSteering();
         UpdateWheels();
     }
@@ -39,11 +48,24 @@ public class CarController : MonoBehaviour
     }
 
     private void HandleMotor() {
-        frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
-        frontRightWheelCollider.motorTorque = verticalInput * motorForce;
-        currentbreakForce = isBreaking ? breakForce : 0f;
         ApplyBreaking();
+        if (tank.gasVolume > 0)
+        {
+            frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
+            frontRightWheelCollider.motorTorque = verticalInput * motorForce;
+            currentbreakForce = isBreaking ? breakForce : 0f;
+        }
+        else
+        {
+            Debug.Log("Car Does Not Have Fuel");
+        }
+
     }
+
+    private void HandleGas()
+    {
+        if (Input.GetKey(KeyCode.W)) tank.DecreaseFuel();
+    } 
 
     private void ApplyBreaking() {
         frontRightWheelCollider.brakeTorque = currentbreakForce;
