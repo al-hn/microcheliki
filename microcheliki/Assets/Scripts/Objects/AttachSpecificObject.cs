@@ -15,21 +15,11 @@ public class AttachSpecificObject : MonoBehaviour
     [Header("Attachment Properties")]
     [SerializeField] private float lerpSpeed = 10.0f;
 
-  
+    [Header("Ignored Rigidbody")]
+    [SerializeField] private Rigidbody ignoredRigidbody;
 
     [HideInInspector]
     public bool isAttached = false;
-    private Rigidbody carRigidbody;
-    private FixedJoint fixedJoint;
-
-    private void Start()
-    {
-        carRigidbody = GameObject.FindGameObjectWithTag(itemTag)?.GetComponent<Rigidbody>();
-        if (carRigidbody == null)
-        {
-            Debug.LogError("Car Rigidbody not found or car tag is incorrect.");
-        }
-    }
 
     private void OnTriggerEnter(Collider other)
     {
@@ -58,11 +48,18 @@ public class AttachSpecificObject : MonoBehaviour
                 return;
             }
 
+            // Check if the object to instantiate has the ignored Rigidbody
+            if (objectRigidbody == ignoredRigidbody)
+            {
+                Debug.Log("Instantiated object's Rigidbody is set to be ignored.");
+                return;
+            }
+
             AttachObjectToCar(objectRigidbody);
 
-            // Set the turret in the Upgrade UI
+            // Set the turret in the Upgrade UI if needed
             Turret turret = item.GetComponent<Turret>();
-          
+            // Add any additional code for handling the turret here
 
             Destroy(other.gameObject);
         }
@@ -70,25 +67,25 @@ public class AttachSpecificObject : MonoBehaviour
 
     public void AttachObjectToCar(Rigidbody objectRigidbody)
     {
-        fixedJoint = gameObject.AddComponent<FixedJoint>();
-        fixedJoint.connectedBody = objectRigidbody;
-
         Vector3 targetPosition = attachPoint.position;
 
-        StartCoroutine(SmoothMoveToAttachPoint(targetPosition));
+        StartCoroutine(SmoothMoveToAttachPoint(targetPosition, objectRigidbody));
 
         isAttached = true;
     }
 
-    private IEnumerator SmoothMoveToAttachPoint(Vector3 targetPosition)
+    private IEnumerator SmoothMoveToAttachPoint(Vector3 targetPosition, Rigidbody objectRigidbody)
     {
-        while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
+        while (Vector3.Distance(objectRigidbody.transform.position, targetPosition) > 0.01f)
         {
-            transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * lerpSpeed);
+            objectRigidbody.transform.position = Vector3.Lerp(objectRigidbody.transform.position, targetPosition, Time.deltaTime * lerpSpeed);
             yield return null;
         }
 
-        transform.position = targetPosition;
+        objectRigidbody.transform.position = targetPosition;
+        objectRigidbody.transform.parent = attachPoint;
+        objectRigidbody.isKinematic = true; // Make the Rigidbody kinematic after attachment
     }
 }
+
 

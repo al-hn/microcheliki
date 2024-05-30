@@ -20,11 +20,13 @@ public class CarController : MonoBehaviour
     [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
     [SerializeField] private Transform rearLeftWheelTransform, rearRightWheelTransform;
 
+    [SerializeField] private Car car;
     private Tank tank;
 
     private void Start()
     {
         tank = GameObject.Find("Tank").GetComponent<Tank>();
+        car = GetComponent<Car>();
     }
 
     private void FixedUpdate() {
@@ -64,7 +66,16 @@ public class CarController : MonoBehaviour
 
     private void HandleGas()
     {
-        if (Input.GetKey(KeyCode.W)) tank.DecreaseFuel();
+        if(car.wheelsAttached)
+        {
+            if (Input.GetKey(KeyCode.W)) tank.DecreaseFuel();
+        }
+        else if (!car.wheelsAttached)
+        {
+            Debug.Log("Find Wheels");
+        
+        }
+        
     } 
 
     private void ApplyBreaking() {

@@ -6,9 +6,10 @@ public class Car : MonoBehaviour
 {
     [Header("Wheel Properties")]
     [SerializeField] AttachingObject[] wheel_attachmentPoints;
-    [SerializeField] AttachingObject shieldAttachPoint;
+    [SerializeField] AttachSpecificObject shieldObject;
     private int attachedWheelsCount = 0;
-    private bool wheelsAttached = false;
+    [HideInInspector]
+    public bool wheelsAttached = false;
     private bool shieldActivated = false;
 
     Shield shield;
@@ -36,6 +37,7 @@ public class Car : MonoBehaviour
         {
             CheckIfShieldIsActivated();
         }
+        else { return; }
 
 
     }
@@ -53,14 +55,14 @@ public class Car : MonoBehaviour
 
         if (totalAttachedWheels == 4)
         {
-            Debug.Log("All four wheels are attached. Car is ready for driving!");
+            Debug.Log("All four wheels are attached!");
             wheelsAttached = true;
         }
     }
 
     private void CheckIfShieldIsActivated()
     {
-        if (shieldAttachPoint.isAttached)
+        if (shieldObject.isAttached)
         {
             Debug.Log("Shield is attached");
             shield.ActivateShield();
