@@ -1098,7 +1098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 340b313f44304354b9ef4d7f772ff308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gasVolume: 0
+  gasVolume: 50
   gasVolumeUpperLimit: 50
 --- !u!1001 &1233655354
 PrefabInstance:

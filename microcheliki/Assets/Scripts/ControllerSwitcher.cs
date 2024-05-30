@@ -7,8 +7,9 @@ public class ControllerSwitcher : MonoBehaviour
     private CameraHolder cameraHolder;
     private CarController carController;
     private PlayerController playerController;
-    private bool isFollowingCar = false;
-    private bool isFollowingPlayer = true;
+    [Header("States")]
+    public bool isFollowingCar = false;
+    public bool isFollowingPlayer = true;
 
     private void Start()
     {
