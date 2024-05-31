@@ -53,9 +53,18 @@ public class CarController : MonoBehaviour
         ApplyBreaking();
         if (tank.gasVolume > 0)
         {
-            frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
-            frontRightWheelCollider.motorTorque = verticalInput * motorForce;
-            currentbreakForce = isBreaking ? breakForce : 0f;
+            if(car.wheelsAttached)
+            {
+                frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
+                frontRightWheelCollider.motorTorque = verticalInput * motorForce;
+                currentbreakForce = isBreaking ? breakForce : 0f;
+
+            }
+            else
+            {
+                Debug.Log("Find wheels");
+            }
+            
         }
         else
         {

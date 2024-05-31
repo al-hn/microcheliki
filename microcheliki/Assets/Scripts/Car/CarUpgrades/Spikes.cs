@@ -9,13 +9,16 @@ public class Spikes : MonoBehaviour
     private float decrementInterval = 1.0f;     // Time in sec, between each decrement
     private float nextDecrementTime = 0.0f;
 
-    private int zombieHealth = 100;             // Placeholder
-
+    ZombieEnemy zombie;          // Placeholder
+    private void Start()
+    {
+        zombie = FindAnyObjectByType<ZombieEnemy>();
+    }
     void OnCollisionStay(Collision other)
     {
         if (other.gameObject.tag == "Zombie")
         {
-            zombieHealth -= damage;
+            zombie.GetHitAnim(damage);
             nextDecrementTime = Time.time + decrementInterval; // Wait 1 Sec
         }
     }

@@ -9,6 +9,9 @@ TagManager:
   - Enemy
   - Turret
   - Shield
+  - Muscle
+  - Car
+  - Spike
   layers:
   - Default
   - TransparentFX

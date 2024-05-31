@@ -5,6 +5,7 @@ using UnityEngine;
 public class ZombieEnemy : MonoBehaviour
 {
     private GameObject[] players;
+    private GameObject[] cars;
     private Rigidbody myBody;
     private Animator anim;
 
@@ -38,9 +39,11 @@ public class ZombieEnemy : MonoBehaviour
     void EnemyAI()
     {
         players = GameObject.FindGameObjectsWithTag("Player");
-        if (players.Length == 0) return;
+        cars = GameObject.FindGameObjectsWithTag("Car");
 
-        GameObject closestPlayer = null;
+        if (players.Length == 0 && cars.Length == 0) return;
+
+        GameObject closestTarget = null;
         float closestDistance = Mathf.Infinity;
 
         foreach (var player in players)
@@ -49,19 +52,29 @@ public class ZombieEnemy : MonoBehaviour
             if (distance < closestDistance)
             {
                 closestDistance = distance;
-                closestPlayer = player;
+                closestTarget = player;
             }
         }
 
-        if (closestPlayer == null) return;
+        foreach (var car in cars)
+        {
+            float distance = Vector3.Distance(transform.position, car.transform.position);
+            if (distance < closestDistance)
+            {
+                closestDistance = distance;
+                closestTarget = car;
+            }
+        }
 
-        Vector3 direction = closestPlayer.transform.position - transform.position;
-        float distanceToPlayer = direction.magnitude;
+        if (closestTarget == null) return;
+
+        Vector3 direction = closestTarget.transform.position - transform.position;
+        float distanceToTarget = direction.magnitude;
         direction.Normalize();
 
         Vector3 velocity = direction * enemy_Speed;
 
-        if (distanceToPlayer > enemy_Attack_Treshold && distanceToPlayer < enemy_Watch_Treshold)
+        if (distanceToTarget > enemy_Attack_Treshold && distanceToTarget < enemy_Watch_Treshold)
         {
             myBody.velocity = new Vector3(velocity.x, myBody.velocity.y, velocity.z);
 
@@ -72,10 +85,10 @@ public class ZombieEnemy : MonoBehaviour
 
             anim.SetTrigger("Run");
 
-            transform.LookAt(new Vector3(closestPlayer.transform.position.x,
-                transform.position.y, closestPlayer.transform.position.z));
+            transform.LookAt(new Vector3(closestTarget.transform.position.x,
+                transform.position.y, closestTarget.transform.position.z));
         }
-        else if (distanceToPlayer < enemy_Attack_Treshold)
+        else if (distanceToTarget < enemy_Attack_Treshold)
         {
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Run"))
             {
@@ -84,12 +97,30 @@ public class ZombieEnemy : MonoBehaviour
 
             anim.SetTrigger("Attack");
 
-            transform.LookAt(new Vector3(closestPlayer.transform.position.x,
-                transform.position.y, closestPlayer.transform.position.z));
+            transform.LookAt(new Vector3(closestTarget.transform.position.x,
+                transform.position.y, closestTarget.transform.position.z));
+
+            // Deal damage to the target
+            if (closestTarget.CompareTag("Player"))
+            {
+                PlayerHealth playerHealth = closestTarget.GetComponent<PlayerHealth>();
+                if (playerHealth != null)
+                {
+                    playerHealth.TakeDamageFromAttack(10f); 
+                }
+            }
+            else if (closestTarget.CompareTag("Muscle"))
+            {
+                CarHealth carHealth = closestTarget.GetComponent<CarHealth>();
+                if (carHealth != null)
+                {
+                    carHealth.DamageCar(10f); 
+                }
+            }
         }
         else
         {
-            myBody.velocity = new Vector3(0f, 0f, 0f);
+            myBody.velocity = Vector3.zero;
 
             if (anim.GetCurrentAnimatorStateInfo(0).IsName("Run") ||
                 anim.GetCurrentAnimatorStateInfo(0).IsName("Attack"))
@@ -117,5 +148,6 @@ public class ZombieEnemy : MonoBehaviour
         }
     }
 }
+
 
 

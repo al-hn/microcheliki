@@ -7,39 +7,31 @@ public class Car : MonoBehaviour
     [Header("Wheel Properties")]
     [SerializeField] AttachingObject[] wheel_attachmentPoints;
     [SerializeField] AttachSpecificObject shieldObject;
+    [SerializeField] AttachSpecificObject spikeObject; // Add spike object
     private int attachedWheelsCount = 0;
     [HideInInspector]
     public bool wheelsAttached = false;
-    private bool shieldActivated = false;
-
-    Shield shield;
+    private bool shieldAttachedLastFrame = false;
+    private bool spikeAttachedLastFrame = false;
+    private bool shieldActivated = true;
+    private bool spikeActivated = false;
 
     private void Start()
     {
-
         if (wheel_attachmentPoints.Length == 0)
         {
             Debug.LogError("No attachment points found on the car.");
         }
-        shield = FindAnyObjectByType<Shield>();
-
     }
 
-    // Check if all four wheels are attached
     private void Update()
     {
         if (!wheelsAttached)
         {
             CheckIfWheelsAttached();
-
         }
-        if (!shieldActivated)
-        {
-            CheckIfShieldIsActivated();
-        }
-        else { return; }
 
-
+        CheckIfShieldOrSpikeIsActivated();
     }
 
     private void CheckIfWheelsAttached()
@@ -60,14 +52,52 @@ public class Car : MonoBehaviour
         }
     }
 
-    private void CheckIfShieldIsActivated()
+    private void CheckIfShieldOrSpikeIsActivated()
     {
-        if (shieldObject.isAttached)
-        {
-            Debug.Log("Shield is attached");
-            shield.ActivateShield();
-            shieldActivated = true;
+        bool shieldCurrentlyAttached = shieldObject.isAttached;
+        bool spikeCurrentlyAttached = spikeObject.isAttached;
 
+        // If the shield state has changed
+        if (shieldCurrentlyAttached && !shieldAttachedLastFrame)
+        {
+            if (spikeCurrentlyAttached)
+            {
+                RemoveSpike();
+            }
+            Debug.Log("Shield is attached");
+            shieldObject.gameObject.SetActive(true); // Enable the shield object
+            shieldActivated = true;
+            spikeActivated = false;
         }
+
+        // If the spike state has changed
+        if (spikeCurrentlyAttached && !spikeAttachedLastFrame)
+        {
+            if (shieldCurrentlyAttached)
+            {
+                RemoveShield();
+            }
+            Debug.Log("Spike is attached");
+            spikeObject.gameObject.SetActive(true); // Enable the spike object
+            spikeActivated = true;
+            shieldActivated = false;
+        }
+
+        shieldAttachedLastFrame = shieldCurrentlyAttached;
+        spikeAttachedLastFrame = spikeCurrentlyAttached;
+    }
+
+    private void RemoveShield()
+    {
+        Debug.Log("Removing shield");
+        shieldObject.gameObject.SetActive(false); // Disable the shield object
+        shieldAttachedLastFrame = false;
+    }
+
+    private void RemoveSpike()
+    {
+        Debug.Log("Removing spike");
+        spikeObject.gameObject.SetActive(false); // Disable the spike object
+        spikeAttachedLastFrame = false;
     }
 }
