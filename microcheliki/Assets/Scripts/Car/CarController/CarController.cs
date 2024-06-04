@@ -5,114 +5,55 @@ using UnityEngine;
 
 public class CarController : MonoBehaviour
 {
-    private float horizontalInput, verticalInput;
-    private float currentSteerAngle, currentbreakForce;
-    private bool isBreaking;
+    [SerializeField] private Transform _transformFL;
+    [SerializeField] private Transform _transformFR;
+    [SerializeField] private Transform _transformBL;
+    [SerializeField] private Transform _transformBR;
 
-    // Settings
-    [SerializeField] private float motorForce, breakForce, maxSteerAngle;
+    [SerializeField] private WheelCollider _colliderFL;
+    [SerializeField] private WheelCollider _colliderFR;
+    [SerializeField] private WheelCollider _colliderBL;
+    [SerializeField] private WheelCollider _colliderBR;
+    
+    [SerializeField] public float _force;
+    [SerializeField] public float _maxAngle;
 
-    // Wheel Colliders
-    [SerializeField] private WheelCollider frontLeftWheelCollider, frontRightWheelCollider;
-    [SerializeField] private WheelCollider rearLeftWheelCollider, rearRightWheelCollider;
+    private void FixedUpdate(){
+        _colliderFL.motorTorque=Input.GetAxis("Vertical") * _force;
+        _colliderFR.motorTorque=Input.GetAxis("Vertical") * _force;
 
-    // Wheels
-    [SerializeField] private Transform frontLeftWheelTransform, frontRightWheelTransform;
-    [SerializeField] private Transform rearLeftWheelTransform, rearRightWheelTransform;
+        if(Input.GetKey(KeyCode.Space)){
+            _colliderFL.brakeTorque = 3000f;
+            _colliderFR.brakeTorque = 3000f;
+            _colliderBL.brakeTorque = 3000f;
+            _colliderBR.brakeTorque = 3000f;
+        }
+        else{
+            _colliderFL.brakeTorque = 0f;
+            _colliderFR.brakeTorque = 0f;
+            _colliderBL.brakeTorque = 0f;
+            _colliderBR.brakeTorque = 0f;
+        }
 
-    [SerializeField] private Car car;
-    private Tank tank;
+        _colliderFL.steerAngle = _maxAngle * Input.GetAxis("Horizontal");
+        _colliderFR.steerAngle = _maxAngle * Input.GetAxis("Horizontal");
 
-    private void Start()
+        RotateWheel(_colliderFL,_transformFL);
+        RotateWheel(_colliderFR,_transformFR);
+        RotateWheel(_colliderBL,_transformBL);
+        RotateWheel(_colliderBR,_transformBR);
+    }
+    private void RotateWheel(WheelCollider collider,Transform transform)
     {
-        tank = GameObject.Find("Tank").GetComponent<Tank>();
-        car = GetComponent<Car>();
+        Vector3 position;
+        Quaternion rotation;
+
+        collider.GetWorldPose(out position, out rotation);
+
+        transform.rotation = rotation;
+        transform.position = position;
     }
-
-    private void FixedUpdate() {
-        GetInput();
-        
-        HandleMotor();
-        HandleGas();
-        HandleSteering();
-        UpdateWheels();
+     public void MotorUpd(){
+        _force = _force + 1500;
     }
-
-    private void GetInput() {
-        // Steering Input
-        horizontalInput = Input.GetAxis("Horizontal");
-
-        // Acceleration Input
-        verticalInput = Input.GetAxis("Vertical");
-
-        // Breaking Input
-        isBreaking = Input.GetKey(KeyCode.Space);
-    }
-
-    private void HandleMotor() {
-        ApplyBreaking();
-        if (tank.gasVolume > 0)
-        {
-            if(car.wheelsAttached)
-            {
-                frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
-                frontRightWheelCollider.motorTorque = verticalInput * motorForce;
-                currentbreakForce = isBreaking ? breakForce : 0f;
-
-            }
-            else
-            {
-                Debug.Log("Find wheels");
-            }
-            
-        }
-        else
-        {
-            Debug.Log("Car Does Not Have Fuel");
-        }
-
-    }
-
-    private void HandleGas()
-    {
-        if(car.wheelsAttached)
-        {
-            if (Input.GetKey(KeyCode.W)) tank.DecreaseFuel();
-        }
-        else if (!car.wheelsAttached)
-        {
-            Debug.Log("Find Wheels");
-        
-        }
-        
-    } 
-
-    private void ApplyBreaking() {
-        frontRightWheelCollider.brakeTorque = currentbreakForce;
-        frontLeftWheelCollider.brakeTorque = currentbreakForce;
-        rearLeftWheelCollider.brakeTorque = currentbreakForce;
-        rearRightWheelCollider.brakeTorque = currentbreakForce;
-    }
-
-    private void HandleSteering() {
-        currentSteerAngle = maxSteerAngle * horizontalInput;
-        frontLeftWheelCollider.steerAngle = currentSteerAngle;
-        frontRightWheelCollider.steerAngle = currentSteerAngle;
-    }
-
-    private void UpdateWheels() {
-        UpdateSingleWheel(frontLeftWheelCollider, frontLeftWheelTransform);
-        UpdateSingleWheel(frontRightWheelCollider, frontRightWheelTransform);
-        UpdateSingleWheel(rearRightWheelCollider, rearRightWheelTransform);
-        UpdateSingleWheel(rearLeftWheelCollider, rearLeftWheelTransform);
-    }
-
-    private void UpdateSingleWheel(WheelCollider wheelCollider, Transform wheelTransform) {
-        Vector3 pos;
-        Quaternion rot; 
-        wheelCollider.GetWorldPose(out pos, out rot);
-        wheelTransform.rotation = rot;
-        wheelTransform.position = pos;
-    }
-
 }
