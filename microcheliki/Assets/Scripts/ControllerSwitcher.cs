@@ -7,14 +7,18 @@ public class ControllerSwitcher : MonoBehaviour
     private CameraHolder cameraHolder;
     private CarController carController;
     private PlayerController playerController;
-    [Header("States")]
+
+    [HideInInspector]
     public bool isFollowingCar = false;
     public bool isFollowingPlayer = true;
+    
+    [Header("Car object's name")]
+    public string carObjName;
 
     private void Start()
     {
         cameraHolder = GameObject.Find("CameraHolder").GetComponent<CameraHolder>();
-        carController = GameObject.Find("Muscle").GetComponent<CarController>();
+        carController = GameObject.Find(carObjName).GetComponent<CarController>();
         playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         
     }
