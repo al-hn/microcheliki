@@ -33,6 +33,14 @@ public class AttachingObject : MonoBehaviour
                 wheelCollider.enabled = false;
             }
 
+            // Disable gravity on the wheel's Rigidbody
+            Rigidbody wheelRigidbody = wheelObject.GetComponent<Rigidbody>();
+            if (wheelRigidbody != null)
+            {
+                wheelRigidbody.useGravity = false;
+                wheelRigidbody.isKinematic = true; // Make the Rigidbody kinematic
+            }
+
             isAttached = true;
 
             // Destroy the collided object
@@ -40,7 +48,6 @@ public class AttachingObject : MonoBehaviour
         }
     }
 }
-
 
 
 
