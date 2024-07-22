@@ -7,16 +7,12 @@ public class GasTank : MonoBehaviour
     [SerializeField] int gasVolume = 100;
     private float decrementInterval = 1.0f;     // Time in sec, between each decrement
     private float nextDecrementTime = 0.0f;
-    Tank tank;
-
-    private void Start()
-    {
-        tank = GameObject.Find("Tank").GetComponent<Tank>();
-    }
+    [SerializeField] private Tank tank; // This is a script that should be attached to car or empty gameobject inside car
+    [SerializeField] private GameObject car;
 
     void OnCollisionStay(Collision other)
     {
-        if(other.gameObject.name == "Muscle")
+        if(other.gameObject == car)
         {
             if(gasVolume > 0)
             {
@@ -31,7 +27,4 @@ public class GasTank : MonoBehaviour
             }
         }
     }
-
-
-
 }

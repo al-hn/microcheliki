@@ -15,10 +15,7 @@ public class Tank : MonoBehaviour
         else Debug.Log("Car Fuel Is Full!");
     }
 
-    public void DecreaseFuel()
-    {
-        gasVolume = gasVolume - 1;
-    }
+    public void DecreaseFuel() => gasVolume = gasVolume - 1;
 
     private void Update()
     {
@@ -28,10 +25,5 @@ public class Tank : MonoBehaviour
         }
     }
 
-    public void UpgradeTank()
-    {
-        gasVolumeUpperLimit = gasVolumeUpperLimit + 50;
-        // ...
-    }
-
+    public void UpgradeTank() => gasVolumeUpperLimit = gasVolumeUpperLimit + 50;
 }
