@@ -23,6 +23,7 @@ public class PlayerController : MonoBehaviour
     public float playerHeight;
     public LayerMask whatIsGround;
     public bool grounded;
+    [HideInInspector] public bool scriptIsActive; 
 
     private void Start()
     {
@@ -33,17 +34,28 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (!scriptIsActive)
+            return;
+        
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
 
         MyInput();
         SpeedControll();
 
         // To Handle Drag
-        if(grounded) rb.drag = groundDrag;
-        else rb.drag = 0;
+        if(grounded)
+            rb.drag = groundDrag;
+        else
+            rb.drag = 0;
     }
 
-    private void FixedUpdate() => MovePlayer();
+    private void FixedUpdate()
+    {
+        if (!scriptIsActive)
+            return;
+
+        MovePlayer();
+    }
 
     private void MyInput()
     {
@@ -86,4 +98,7 @@ public class PlayerController : MonoBehaviour
     }
 
     private void ResetJump() => readyToJump = true;
+
+    public void ActivateScript() =>    scriptIsActive = true;
+    public void DeactivateScript() =>  scriptIsActive = false;
 }

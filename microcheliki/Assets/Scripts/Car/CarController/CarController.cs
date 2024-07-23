@@ -21,6 +21,8 @@ public class CarController : MonoBehaviour
     [SerializeField] private GameObject capsuleFR;
     [SerializeField] private GameObject capsuleBL;
     [SerializeField] private GameObject capsuleBR;
+    
+    [HideInInspector] public bool scriptIsActive;
 
     private void Awake()
     {
@@ -29,6 +31,9 @@ public class CarController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!scriptIsActive)
+            return;
+        
         _colliderFL.motorTorque = Input.GetAxis("Vertical") * _force;
         _colliderFR.motorTorque = Input.GetAxis("Vertical") * _force;
 
@@ -81,6 +86,7 @@ public class CarController : MonoBehaviour
 
         Physics.IgnoreLayerCollision(LayerMask.NameToLayer("IgnoreCarCollision"), gameObject.layer);
     }
+
+    public void ActivateScript()   => scriptIsActive = true;
+    public void DeactivateScript() => scriptIsActive = false;
 }
-
-

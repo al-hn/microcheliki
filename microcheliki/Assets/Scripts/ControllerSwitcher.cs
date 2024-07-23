@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class ControllerSwitcher : MonoBehaviour
 {
-    [HideInInspector]
-    public bool isFollowingCar = false;
-    public bool isFollowingPlayer = true;
-    
     [Header("Elements")]
     public PlayerController playerController;
     public CarController carController;
     public CameraHolder cameraHolder;
+
+    private void Awake()
+    {
+        carController.DeactivateScript();
+        playerController.ActivateScript();
+        cameraHolder.FollowPlayer();
+    }
 
     private void Update()
     {
@@ -20,27 +23,23 @@ public class ControllerSwitcher : MonoBehaviour
 
     public void HandleSwitch()
     {
-        if (isFollowingPlayer)
-        {
-            cameraHolder.FollowPlayer();
-            playerController.enabled = true;
-            carController.enabled = false;
-        }
-        else if (isFollowingCar)
+        if (carController.scriptIsActive)
         {
             cameraHolder.FollowCar();
-            carController.enabled = true;
-            playerController.enabled = false;
-        } 
+        }
+        if (playerController.scriptIsActive)
+        {
+            cameraHolder.FollowPlayer();
+        }
         if (Input.GetKeyDown(KeyCode.L))
         {
-            isFollowingPlayer = false;
-            isFollowingCar = true;
+            carController.ActivateScript();
+            playerController.DeactivateScript();
         }
         if(Input.GetKeyDown(KeyCode.K))
         {
-            isFollowingCar = false;
-            isFollowingPlayer = true;
+            carController.DeactivateScript();
+            playerController.ActivateScript();
         }
     }
 }

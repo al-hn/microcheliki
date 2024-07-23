@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 7145039503294790587}
   - component: {fileID: 2854407040508959817}
   - component: {fileID: 6655423810254025122}
-  - component: {fileID: 5125897962640940784}
   m_Layer: 0
   m_Name: car_T1
   m_TagString: Untagged
@@ -190,6 +189,10 @@ MonoBehaviour:
   _colliderBR: {fileID: 0}
   _force: 0
   _maxAngle: 0
+  capsuleFL: {fileID: 0}
+  capsuleFR: {fileID: 0}
+  capsuleBL: {fileID: 0}
+  capsuleBR: {fileID: 0}
 --- !u!114 &6655423810254025122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,28 +239,6 @@ MonoBehaviour:
     m_ColorSpace: -1
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
---- !u!64 &5125897962640940784
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1206012070017057675}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &1505834156472980531
 GameObject:
   m_ObjectHideFlags: 0
