@@ -6,7 +6,7 @@ public class ControllerSwitcher : MonoBehaviour
 {
     [Header("Elements")]
     public PlayerController playerController;
-    public CarController carController;
+    public Car_inner_controller carController;
     public CameraHolder cameraHolder;
 
     private void Awake()

@@ -10,9 +10,14 @@ public class Car_inner_controller : MonoBehaviour
     public float SteerAngle = 20;
     public float Traction = 1;
     private Vector3 MoveForce;
+    [HideInInspector] public bool scriptIsActive;
+
     // Update is called once per frame
     void Update()
     {
+        if (!scriptIsActive)
+            return;
+
         // Moving
         MoveForce += transform.forward * MoveSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
         transform.position += MoveForce * Time.deltaTime;
@@ -29,4 +34,7 @@ public class Car_inner_controller : MonoBehaviour
         Debug.DrawRay(transform.position, transform.forward * 3, Color.blue);
         MoveForce = Vector3.Lerp(MoveForce.normalized, transform.forward, Traction * Time.deltaTime) * MoveForce.magnitude;
     }
+
+    public void ActivateScript() => scriptIsActive = true;
+    public void DeactivateScript() => scriptIsActive = false;
 }
